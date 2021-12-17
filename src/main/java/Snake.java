@@ -1,15 +1,18 @@
-import java.util.*;
+import java.util.Deque;
+import java.util.LinkedList;
 
 public class Snake {
-    Point head;
-    Deque<Point> tail;
-    Movement currentMovement;
+    private Point head;
+    private final Deque<Point> tail;
+    private Movement currentMovement;
+    private boolean hasCollided;
+
     private Snake(Point head) {
         this.head = head;
-        this.tail = new LinkedList<>();
-        tail.addFirst(head);
+        tail = new LinkedList<>();
         tail.add(new Point(head.getX() - 1, head.getY()));
-        this.currentMovement = Movement.RIGHT;
+        tail.addFirst(head);
+        currentMovement = Movement.RIGHT;
     }
 
     public static Snake getFreshSnake(int boardWidth, int boardHeight) {
@@ -17,34 +20,24 @@ public class Snake {
         return new Snake(head);
     }
 
-    public Point getHead() {
-        return head;
-    }
-
     public void getNextSnake(Movement input, Point food) {
-        this.currentMovement = getNextInput(input, currentMovement);
-        Point newHead =
-                switch (currentMovement) {
-                    case UP -> new Point(head.getX(), head.getY() - 1);
-                    case DOWN -> new Point(head.getX(), head.getY() + 1);
-                    case LEFT -> new Point(head.getX() - 1, head.getY());
-                    case RIGHT -> new Point(head.getX() + 1, head.getY());
-                };
+        currentMovement = getNextInput(input, currentMovement);
+        Point newHead = Movement.getNewHead(currentMovement, head);
         updateSnake(newHead, food);
     }
 
     private void updateSnake(Point newHead, Point food) {
         if (tail.contains(newHead)) {
-            throw new UnsupportedOperationException();
+            hasCollided = true;
+            return;
         }
         tail.addFirst(newHead);
-        this.head = newHead;
+        head = newHead;
         if (!newHead.equals(food)) {
             tail.removeLast();
         }
     }
 
-    //TODO: get rid of static method somehow?
     private Movement getNextInput(Movement inputState, Movement currentState) {
         if (inputState == currentState.opposite() || inputState == currentState) {
             return currentState;
@@ -57,8 +50,15 @@ public class Snake {
         return tail;
     }
 
-    public Set<Point> getSnakePointsAsSet() {
-        return new HashSet<>(tail);
+    public Movement getCurrentMovement() {
+        return currentMovement;
     }
 
+    public Point getHead() {
+        return head;
+    }
+
+    public boolean hasCollided() {
+        return hasCollided;
+    }
 }

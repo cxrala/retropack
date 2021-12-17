@@ -1,26 +1,31 @@
-import java.util.*;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TinyBoard implements Board {
-    private Snake snake;
-    private Set<Point> pointSet;
+    private final Snake snake;
+    private final Set<Point> pointSet;
     private Point food;
+    private boolean isOver;
 
     TinyBoard() {
-        this.snake = Snake.getFreshSnake(getWidth(), getHeight());
-        this.pointSet = new HashSet<>();
-        this.food = new Point(getWidth() / 2 + 2, getHeight() / 2);
-
-        //Todo: change to streams? Not rlly sure how to...
-        for (int i = 0; i < getWidth(); i++) {
-            for (int j = 0; j < getHeight(); j++) {
-                pointSet.add(new Point(i, j));
-            }
-        }
+        snake = Snake.getFreshSnake(getWidth(), getHeight());
+        food = new Point(getWidth() / 2 + 2, getHeight() / 2);
+        pointSet = IntStream.range(0, getWidth())
+                .mapToObj(i -> IntStream.range(0, getHeight()).mapToObj(j -> new Point(i, j)))
+                .flatMap(UnaryOperator.identity())
+                .collect(Collectors.toCollection(HashSet::new));
     }
 
     private boolean[][] drawSnakeOnBoard(Snake snake) {
         boolean[][] tempBoard = new boolean[getWidth()][getHeight()];
         Deque<Point> snakePoints = snake.getSnakePoints();
+
+        //TODO: streams
         for (Point point : snakePoints) {
             tempBoard[point.getY()][point.getX()] = true;
         }
@@ -29,30 +34,40 @@ public class TinyBoard implements Board {
 
     @Override
     public Board nextBoard(Movement input) {
+        if (snake.hasCollided()) {
+            isOver = true;
+        }
         snake.getNextSnake(input, food);
         if (snake.getHead().equals(food)) {
-
-            //TODO: if unoccupiedPoints = 0 then win
-            this.food = getNewFood();
-
+            food = getNewFood();
         }
         return this;
     }
 
     private Point getNewFood() {
+        //TODO: if unoccupiedPoints = 0 then win
         Set<Point> unoccupiedPoints = new HashSet<>(pointSet);
-        unoccupiedPoints.removeAll(snake.getSnakePointsAsSet());
+        unoccupiedPoints.removeAll(new HashSet<>(snake.getSnakePoints()));
 
-        int size = unoccupiedPoints.size();
-        int item = new Random().nextInt(size);
+        int item = new Random().nextInt(unoccupiedPoints.size());
         int i = 0;
         for (Point point : unoccupiedPoints) {
-            if (i == item) {
+            if (i++ == item) {
                 return point;
             }
-            i++;
         }
+
+        // todo: they win because the unoccupiedPoints set has a size 0
         throw new UnsupportedOperationException();
+    }
+
+
+    @Override
+    public boolean[][] drawBoard() {
+        boolean[][] finalBoard = drawSnakeOnBoard(snake);
+        finalBoard[food.getY()][food.getX()] = true;
+
+        return finalBoard;
     }
 
     @Override
@@ -65,19 +80,13 @@ public class TinyBoard implements Board {
         return 8;
     }
 
+    public Snake getSnake() {
+        return snake;
+    }
 
     @Override
-    public String drawBoard() {
-        boolean[][] finalBoard = drawSnakeOnBoard(snake);
-        finalBoard[food.getY()][food.getX()] = true;
-
-        return Arrays.deepToString(finalBoard).replace("], ", "]\n")
-                .replace("[[", "[")
-                .replace("]]", "]")
-                .replace("false,", String.format("%-" + 1 + "s", "-"))
-                .replace("false", String.format("%-" + 1 + "s", "-"))
-                .replace("true, ", String.format("%-" + 2 + "d", 1))
-                .replace("true", String.format("%-" + 1 + "d", 1));
+    public boolean gameOver() {
+        return isOver;
     }
 
 }

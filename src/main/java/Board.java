@@ -1,6 +1,13 @@
 public interface Board {
     int getWidth();
+
     int getHeight();
-    String drawBoard();
+
+    boolean[][] drawBoard();
+
     Board nextBoard(Movement input);
+
+    Snake getSnake();
+
+    boolean gameOver();
 }
