@@ -20,7 +20,7 @@ public class Snake {
         return new Snake(head);
     }
 
-    public void getNextSnake(Movement input, Point food) {
+    public void nextSnake(Movement input, Point food) {
         currentMovement = getNextInput(input, currentMovement);
         Point newHead = Movement.getNewHead(currentMovement, head);
         updateSnake(newHead, food);

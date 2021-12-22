@@ -1,35 +1,34 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
-        // TODO: this is so sus this should really be in the Game class...(?)
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))){
             while (true) {
-                Game game = new Game(new TinyBoard());
-                while (!game.isGameOver()) {
-                    game.drawBoard();
-                    System.out.println("Next move:");
-                    String input = br.readLine();
-                    game.nextState(game.convertStringToMovement(input));
+                SnakeGame snakeGame = new SnakeGame(new TinySnakeBoard());
+
+                while (snakeGame.getGameState() == GameStates.PLAYING) {
+                    snakeGame.draw();
+                    System.out.println("Next move: ");
+                    String input = br.readLine(); // this will change
+                    snakeGame.updateState(snakeGame.convertStringToMovement(input)); // this will change (thing inside the bracket)
                 }
-                System.out.println("how tf did you lose at snake");
-                System.out.println("play again?");
+                if (snakeGame.getGameState() == GameStates.LOST) {
+                    System.out.println("You lost.");
+                } else {
+                    System.out.println("You won!");
+                }
+                System.out.println("Play again?");
                 String input = br.readLine();
                 if (!input.equalsIgnoreCase("yes")) {
                     break;
                 }
             }
-            System.out.println("smh compscicat does not like u");
+            System.out.println("You have disappointed your family."); // this will change
         } catch(IllegalStateException | NoSuchElementException | IOException e) {
-            System.out.println("System.in was closed; exiting");
+            System.out.println("System.in was closed; exiting"); // this will change
         }
-
     }
 }

@@ -1,4 +1,4 @@
-public enum Movement {
+public enum Movement{
     LEFT,
     RIGHT,
     UP,
@@ -13,14 +13,14 @@ public enum Movement {
         };
     }
 
-    public static Point getNewHead(Movement currentMovement, Point head) {
-        Point newHead =
+    public static Point getNewHead(Movement currentMovement, Point point) {
+        Point nextPoint =
                 switch (currentMovement) {
-                    case UP -> new Point(head.getX(), head.getY() - 1);
-                    case DOWN -> new Point(head.getX(), head.getY() + 1);
-                    case LEFT -> new Point(head.getX() - 1, head.getY());
-                    case RIGHT -> new Point(head.getX() + 1, head.getY());
+                    case UP -> new Point(point.getX(), point.getY() - 1);
+                    case DOWN -> new Point(point.getX(), point.getY() + 1);
+                    case LEFT -> new Point(point.getX() - 1, point.getY());
+                    case RIGHT -> new Point(point.getX() + 1, point.getY());
                 };
-        return newHead;
+        return nextPoint;
     }
 }
