@@ -1,3 +1,6 @@
+package game.retropack.an639.snake;
+
+import game.retropack.an639.*;
 import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -10,7 +13,7 @@ public class TinySnakeBoard implements SnakeBoard {
     private Point food;
     private GameStates gameState;
 
-    TinySnakeBoard() {
+    public TinySnakeBoard() {
         snake = Snake.getFreshSnake(getWidth(), getHeight());
         food = new Point(getWidth() / 2 + 2, getHeight() / 2);
         pointSet = IntStream.range(0, getWidth())

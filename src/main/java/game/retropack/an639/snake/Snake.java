@@ -1,3 +1,6 @@
+package game.retropack.an639.snake;
+
+import game.retropack.an639.*;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -22,7 +25,7 @@ public class Snake {
 
     public void nextSnake(Movement input, Point food) {
         currentMovement = getNextInput(input, currentMovement);
-        Point newHead = Movement.getNewHead(currentMovement, head);
+        Point newHead = Movement.nextPoint(currentMovement, head);
         updateSnake(newHead, food);
     }
 

@@ -1,3 +1,5 @@
+package game.retropack.an639;
+
 public enum Movement{
     LEFT,
     RIGHT,
@@ -13,7 +15,7 @@ public enum Movement{
         };
     }
 
-    public static Point getNewHead(Movement currentMovement, Point point) {
+    public static Point nextPoint(Movement currentMovement, Point point) {
         Point nextPoint =
                 switch (currentMovement) {
                     case UP -> new Point(point.getX(), point.getY() - 1);
