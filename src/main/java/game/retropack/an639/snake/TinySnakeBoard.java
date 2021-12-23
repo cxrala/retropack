@@ -6,7 +6,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TinySnakeBoard implements SnakeBoard {
+public class TinySnakeBoard extends SnakeBoard {
 
     private final Snake snake;
     private final Set<Point> pointSet;
@@ -37,12 +37,12 @@ public class TinySnakeBoard implements SnakeBoard {
     }
 
     @Override
-    public SnakeBoard nextBoard(Movement input) {
+    public SnakeBoard nextBoard(Movement2D input) {
         if (snake.hasCollided()) {
             gameState = GameStates.LOST;
         }
         snake.nextSnake(input, food);
-        Point snakeHead = snake.getHead();;
+        Point snakeHead = snake.getHead();
         if (snakeHead.getX() >= getWidth() | snakeHead.getY() >= getHeight() | snakeHead.getX() < 0 | snakeHead.getY() < 0) {
             gameState = GameStates.LOST;
         }

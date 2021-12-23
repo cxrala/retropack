@@ -11,21 +11,21 @@ import java.util.NoSuchElementException;
 public class TerminalSnakeGame implements Game {
 
     private SnakeBoard snakeBoard;
-    private final Map<String, Movement> movementMap;
+    private final Map<String, Movement2D> movementMap;
 
     public TerminalSnakeGame(SnakeBoard snakeBoard) {
         this.snakeBoard = snakeBoard;
 
         movementMap = new HashMap<>();
 
-        movementMap.put("down", Movement.DOWN);
-        movementMap.put("up", Movement.UP);
-        movementMap.put("left", Movement.LEFT);
-        movementMap.put("right", Movement.RIGHT);
+        movementMap.put("down", Movement2D.DOWN);
+        movementMap.put("up", Movement2D.UP);
+        movementMap.put("left", Movement2D.LEFT);
+        movementMap.put("right", Movement2D.RIGHT);
 
     }
 
-    public Movement convertStringToMovement(String input) {
+    public Movement2D convertStringToMovement(String input) {
         String filteredInput = input.toLowerCase();
         if (movementMap.containsKey(filteredInput)) {
             return movementMap.get(filteredInput);
@@ -71,7 +71,7 @@ public class TerminalSnakeGame implements Game {
         }
     }
 
-    public void updateState(Movement input) {
+    public void updateState(Movement2D input) {
         this.snakeBoard = snakeBoard.nextBoard(input);
     }
 

@@ -7,7 +7,7 @@ import java.util.LinkedList;
 public class Snake {
     private Point head;
     private final Deque<Point> tail;
-    private Movement currentMovement;
+    private Movement2D currentMovement2D;
     private boolean hasCollided;
 
     private Snake(Point head) {
@@ -15,7 +15,7 @@ public class Snake {
         tail = new LinkedList<>();
         tail.add(new Point(head.getX() - 1, head.getY()));
         tail.addFirst(head);
-        currentMovement = Movement.RIGHT;
+        currentMovement2D = Movement2D.RIGHT;
     }
 
     public static Snake getFreshSnake(int boardWidth, int boardHeight) {
@@ -23,9 +23,9 @@ public class Snake {
         return new Snake(head);
     }
 
-    public void nextSnake(Movement input, Point food) {
-        currentMovement = getNextInput(input, currentMovement);
-        Point newHead = Movement.nextPoint(currentMovement, head);
+    public void nextSnake(Movement2D input, Point food) {
+        currentMovement2D = getNextInput(input, currentMovement2D);
+        Point newHead = Movement2D.nextPoint(currentMovement2D, head);
         updateSnake(newHead, food);
     }
 
@@ -41,7 +41,7 @@ public class Snake {
         }
     }
 
-    private Movement getNextInput(Movement inputState, Movement currentState) {
+    private Movement2D getNextInput(Movement2D inputState, Movement2D currentState) {
         if (inputState == currentState.opposite() || inputState == currentState) {
             return currentState;
         }
@@ -53,8 +53,8 @@ public class Snake {
         return tail;
     }
 
-    public Movement getCurrentMovement() {
-        return currentMovement;
+    public Movement2D getCurrentMovement() {
+        return currentMovement2D;
     }
 
     public Point getHead() {

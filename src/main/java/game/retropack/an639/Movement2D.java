@@ -1,12 +1,12 @@
 package game.retropack.an639;
 
-public enum Movement{
+public enum Movement2D {
     LEFT,
     RIGHT,
     UP,
     DOWN;
 
-    public Movement opposite() {
+    public Movement2D opposite() {
         return switch (this) {
             case UP -> DOWN;
             case DOWN -> UP;
@@ -15,9 +15,9 @@ public enum Movement{
         };
     }
 
-    public static Point nextPoint(Movement currentMovement, Point point) {
+    public static Point nextPoint(Movement2D currentMovement2D, Point point) {
         Point nextPoint =
-                switch (currentMovement) {
+                switch (currentMovement2D) {
                     case UP -> new Point(point.getX(), point.getY() - 1);
                     case DOWN -> new Point(point.getX(), point.getY() + 1);
                     case LEFT -> new Point(point.getX() - 1, point.getY());
